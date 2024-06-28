@@ -3,6 +3,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertagger/fluttertagger.dart';
@@ -1330,7 +1331,14 @@ class FlutterTaggerController extends TextEditingController {
         if (i != splitText.length - 1) {
           spans.add(TextSpan(text: "$currentText "));
         } else {
-          spans.add(TextSpan(text: currentText));
+          // TODO: on web, the space character appear in a weird display
+          // this is a temporary fix for that problem
+          // we should find the root cause of this
+          if (!kIsWeb) {
+            spans.add(TextSpan(text: currentText));
+          } else {
+            spans.add(TextSpan(text: "$currentText "));
+          }
         }
       }
     }
